@@ -1,0 +1,272 @@
+/*
+ * Style tweaks
+ * --------------------------------------------------
+ */
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+body {
+  padding-top: 70px;
+  position: relative;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #37474f;
+}
+
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+}
+
+/*
+ * -- TABLET MEDIA QUERIES --
+ * On tablets, we want to slightly adjust the size of the banner
+ * text and add some vertical space between the various pricing tables
+ */
+@media(min-width: 767px) {
+
+    .banner-head {
+        font-size: 4em;
+    }
+    .pricing-table {
+        margin-bottom: 0;
+    }
+
+}
+
+/*
+ * -- PHONE MEDIA QUERIES --
+ * On phones, we want to reduce the height and font-size of the banner further
+ */
+@media (min-width: 480px) {
+    .banner {
+        height: 400px;
+    }
+    .banner-head {
+        font-size: 3em;
+    }
+}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+    height: 100px;
+    margin-bottom: 60px;
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+  z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel .item {
+    height: 100px;
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 60px;
+}
+
+.carousel-inner > .item > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  height: 850px;
+}
+
+.carousel-indicators{
+  bottom: -111px;
+}
+
+
+/* Navigation */
+.navbar-nav > li {
+    margin: 15px 0;
+}
+
+.navbar-nav > li > .dropdown-menu{
+    top:98%;
+}
+
+.dropdown a{
+  background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEyLjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==') no-repeat scroll 0% 0% / 50px auto transparent; 
+  padding-left: 55px !important;
+  margin-right: 5px;
+  text-transform:uppercase;
+}
+/*
+#navbar_top > .navbar-nav > li {
+    float: left;
+}
+
+#navbar {
+    position: absolute;
+    top: 100px;
+    z-index: 10;
+}
+
+#navbar ul {
+    width: 200px;
+}
+
+#navbar > ul > li {
+    background-color: #1f75ba;
+    margin-bottom: 1px;
+}
+
+#navbar > ul > li > a {
+    color: #fff;
+}
+
+#navbar .sontitle {
+    font-feature-settings: "liga", "kern";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: 1.33333;
+    text-rendering: optimizelegibility;
+}*/
+
+/*
+ * -- BANNER --
+ * The top banner with the headings. By using a combination
+ * of `display: table;` and `display: table-cell;`, we can
+ * vertically center the text.
+ */
+
+.banner {
+    background: transparent url('../images/tree-crown-in-summer.jpg') 0 0 no-repeat fixed;
+    text-align: center;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/tree-crown-in-summer.jpg', sizingMethod='scale');
+
+    height: 800px;
+    width: 100%;
+    margin-bottom: 3em;
+    display: table;
+}
+
+.banner-head {
+    display: table-cell;
+    vertical-align: middle;
+    margin-bottom: 0;
+    font-size: 2em;
+    color: white;
+    font-weight: 500;
+    text-shadow: 0 1px 1px black;
+}
+
+
+/* Cards */
+.card {
+    background-color: #fff;
+    border-radius: 2px;
+    display: block;
+    margin-bottom: 24px;
+    position: relative;
+    transform: translate3d(0px, 0px, 0px);
+    z-index: 1;
+    box-shadow:0 3px 8px gray;
+}
+
+.card-image{
+    padding: 10px;
+    height: 200px;
+    background-color: #e5e5e5;
+    text-align: center;
+}
+
+.block {
+    display: block;
+    padding: 24px;
+}
+
+.block .text-bottom{
+    bottom: 24px;
+    position: absolute;
+}
+
+.fa-4 {
+    color: #1f75ba;
+    font-size: 9em;
+}
+.jumbotron{
+    margin: 0px;
+}
+.jumbotron.green{
+    background-color: #92D050;
+}
+.jumbotron.blue{
+    background-color: #1F75BA;
+}
+.jumbotron.white{
+    background-color: #FFFFFF;
+}
+
+.jumbotron .h1, .jumbotron h1 {
+    font-size: 36px;
+    color: #fff;
+}
+.jumbotron.white .h1, .jumbotron.white h1{
+    font-size: 36px;
+    color: #666;
+}
+
+
+.panel-success {
+    border-color: #92D050;
+}
+.panel-success > .panel-heading {
+    color: #ffffff;
+    background-color: #92D050;
+    border-color: #92D050;
+}
+

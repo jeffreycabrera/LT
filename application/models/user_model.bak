@@ -1,0 +1,98 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class User_Model extends CI_Model {
+	public function __construct() {
+		parent::__construct();
+		$this->load->database();
+	}
+
+	public function getUsers($userid = -1) {
+        $sql = "SELECT a.UserID, a.LastName, a.FirstName, a.MiddleName, a.Email, c.PTO, a.IsApprover, a.IsAdmin 
+                FROM tbl_user a 
+                    INNER JOIN tbl_leave_credit_type c ON a.UserID = c.UserID 
+                WHERE a.isDeleted = 0 ";
+
+        $sql .= ($userid == -1 || !isset($userid)) ? " GROUP BY a.UserID" : "and a.UserID = ? GROUP BY a.UserID";
+        $result = ($userid == -1 || !isset($userid)) ? $this->db->query($sql) : $this->db->query($sql, array($userid));
+
+        $users = $result->num_rows() > 0 ? $result->result_array() : array();
+
+        $rows = array();
+        foreach ($users as $row) {
+            $approvers = $this->getUserApprovers($row['UserID']);
+            $row["approvers"] = array();
+            foreach ($approvers as $approver) {
+                $row["approvers"][$approver["Heirarchy"]] = $approver;
+            }
+            array_push($rows, $row);
+        }
+
+        return $userid == -1 || !(isset($userid)) ? $rows : $rows[0];
+    }
+
+    public function getUser_summary($userid = -1){
+        $sql = "SELECT u.lastname, u.firstname, u.middlename, u.IsApprover, u.IsAdmin, c.PTO, 
+					(SELECT SUM(TOTAL_WEEKDAYS(StartDate, EndDate)) FROM tbl_leave WHERE startDate < CURDATE() 
+						AND STATUS = 2 AND UserID = u.USERID AND DateCancelled is NULL) AS LeavesTaken,
+					(SELECT SUM(TOTAL_WEEKDAYS(StartDate, EndDate)) FROM tbl_leave WHERE USERID=u.USERID  AND DateCancelled is NULL)  AS LeavesRequest,
+                    (c.PTO - (select count(*) from tbl_leave where startDate < CURDATE() AND (STATUS IS NULL or STATUS >0) AND USERID = u.USERID)) As PTOBalance
+                FROM tbl_user u, tbl_leave_credit_type c ";
+				
+				Select a.LastName, a.Firstname, a.MiddleName, a.IsApprover, a.IsAdmin, coalesce(b.LeavesRequested,0) as LeavesRequested,
+coalesce(c.LeavesTaken,0) as LeavesTaken, coalesce(d.PTO,0) as PTO, coalesce(d.PTO,0) - coalesce(c.LeavesTaken,0) as PTOBalance
+from tbl_user a left Outer join
+(SELECT UserID, SUM(workday) as LeavesRequested FROM
+(SELECT UserID, SUM(TOTAL_WEEKDAYS(StartDate, EndDate)) as workday FROM tbl_leave WHERE endDate < CURDATE() and year(enddate) = year(curdate())
+    AND STATUS is null AND UserID = 'LFTArdo' AND DateCancelled is NULL AND halfday = 0
+    Group By UserID
+ 	UNION ALL
+ 	SELECT UserID, SUM(TOTAL_WEEKDAYS(StartDate, EndDate))/2 as workday FROM tbl_leave WHERE endDate < CURDATE() and year(enddate) = year(curdate())
+    AND STATUS is null AND UserID = 'LFTArdo' AND DateCancelled is NULL AND halfday = 1
+    Group by UserID
+)a Group By UserID) b on a.UserID = b.UserID Left oUTer Join
+(SELECT UserID, SUM(workday) as LeavesTaken FROM
+(SELECT UserID, SUM(TOTAL_WEEKDAYS(StartDate, EndDate)) as workday FROM tbl_leave WHERE endDate < CURDATE() and year(enddate) = year(curdate())
+    AND STATUS = 2 AND UserID = 'LFTArdo' AND DateCancelled is NULL AND halfday = 0
+    Group By UserID
+ 	UNION ALL
+ 	SELECT UserID, SUM(TOTAL_WEEKDAYS(StartDate, EndDate))/2 as workday FROM tbl_leave WHERE endDate < CURDATE() and year(enddate) = year(curdate())
+    AND STATUS = 2 AND UserID = 'LFTArdo' AND DateCancelled is NULL AND halfday = 1
+    Group by UserID
+)a Group By UserID)c on a.UserID = c.userID Left oUter Join 
+(Select a.UserID, a.PTO from tbl_leave_credit_type a inner join
+ (Select userID, max(LCTID) as LCTID from tbl_leave_credit_Type
+  group by userid) b on a.LCTID = b.LCTID) d on a.UserID = d.UserID
+where a.UserID = 'LFTArdo'
+
+
+        $sql .= ($userid == -1 || !isset($userid)) ? " WHERE u.USERID=c.USERID" : " WHERE u.USERID=? GROUP BY u.USERID";
+        $result = ($userid == -1 || !isset($userid)) ? $this->db->query($sql) : $this->db->query($sql, array($userid));
+
+        $users = $result->num_rows() > 0 ? $result->result_array() : array();
+        return $userid == -1 || !(isset($userid)) ? $users : $users[0];
+    }
+
+    public function getUserApprovers($UserID) {
+        $sql = "SELECT a.ApproverID, a.Heirarchy, CONCAT(u.Lastname,', ', u.FirstName) As ApproverName 
+                FROM tbl_user as u 
+                    INNER JOIN tbl_approver as a ON u.userID = a.ApproverID
+                WHERE a.isActive =1 AND a.USERID = ? 
+                GROUP BY a.ApproverID
+                ORDER BY a.Heirarchy asc";
+                
+        $result = $this->db->query($sql, array($UserID));
+        if ($result->num_rows() > 0) {
+            return $result->result_array();
+        }
+        return array();
+    }
+
+    public function getAllApprovers() {
+        $sql = "SELECT userID as approverID, CONCAT(FirstName, ' ',  Lastname) As ApproverName FROM tbl_user WHERE isApprover = 1";
+        $result = $this->db->query($sql);
+
+        if ($result->num_rows() > 0) {
+            return $result->result_array();
+        }
+    }
+}   

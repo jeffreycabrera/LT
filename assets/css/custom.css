@@ -1,0 +1,52 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    padding-top: 50px;
+    margin-bottom: 30px;
+}
+
+.navbar-inverse {
+    background-color:#ededed;
+    border-color:#bfd746;
+}
+
+.navbar-inverse .lt-header {
+    background-image:url('../images/IALT-headbanner.png');
+    background-repeat:no-repeat;
+    background-position:right bottom;
+}
+
+.no-close .ui-dialog-titlebar-close {
+    display: none;
+}
+
+/* ------ Login Page ------ */
+.login-template{
+    width: 330px;
+    margin: 85px auto;
+}
+/* ------ /Login Page ------ */
+
+/* ------ Leave Tracker Page ------ */
+.nav-pills, .nav-tabs {
+    margin:50px 0 10px;
+}
+/* ------ /Leave Tracker Page ------ */
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 30px;
+}
+
+.footer .lt-footer {
+    background-color: #00b0f0;
+    background-image:url('../images/IALT-footerlogo.png');
+    background-repeat:no-repeat;
+    background-position:right bottom;
+    height: 30px;
+}
